@@ -1,0 +1,26 @@
+# Maven
+target/
+
+# Build Output
+dist/
+installer/
+installer_new/
+runtime/
+
+# Java
+*.class
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Logs
+*.log
+
+# Database Configuration
+db.properties
+
+# OS Files
+Thumbs.db
+.DS_Store
