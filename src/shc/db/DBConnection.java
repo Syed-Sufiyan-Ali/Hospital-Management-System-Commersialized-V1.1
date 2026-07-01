@@ -44,6 +44,7 @@ public class DBConnection {
             String pass = props.getProperty("db.password", "");
 
             Class.forName("com.mysql.cj.jdbc.Driver");
+            System.out.println("✓ MySQL Driver Loaded");
             String url = "jdbc:mysql://" + host + ":" + port + "/" + name
                     + "?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
                     System.out.println("URL = " + url);
@@ -51,23 +52,21 @@ public class DBConnection {
                     System.out.println("PASSWORD LENGTH = " + pass.length());
             connection = DriverManager.getConnection(url, user, pass);
         } catch (ClassNotFoundException e) {
-            JOptionPane.showMessageDialog(null,
-                "MySQL JDBC Driver not found.\nPlace mysql-connector.jar in the /lib folder.",
-                "Driver Error", JOptionPane.ERROR_MESSAGE);
-            System.exit(1);
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null,
-                "Cannot connect to MySQL database.\n\n" +
-                "Please check db.properties and ensure MySQL is running.\n\nError: " + e.getMessage(),
-                "Connection Error", JOptionPane.ERROR_MESSAGE);
-            System.exit(1);
+             throw new RuntimeException(e);
+        } 
+        catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    private Properties loadConfig() {
+   private Properties loadConfig() {
+
     Properties props = new Properties();
 
     try {
+
+        File configFile;
+
         File appDir = new File(
                 DBConnection.class
                         .getProtectionDomain()
@@ -76,30 +75,30 @@ public class DBConnection {
                         .toURI())
                 .getParentFile();
 
-        File f = new File(appDir, "db.properties");
+        configFile = new File(appDir, "db.properties");
 
-        System.out.println("Reading config from:");
-        System.out.println(f.getAbsolutePath());
-
-        if (!f.exists()) {
-            JOptionPane.showMessageDialog(null,
-                    "db.properties not found:\n" + f.getAbsolutePath(),
-                    "Configuration Error",
-                    JOptionPane.ERROR_MESSAGE);
-            System.exit(1);
+        // Development mode fallback
+        if (!configFile.exists()) {
+            configFile = new File("target/classes/db.properties");
         }
 
-        try (FileInputStream fis = new FileInputStream(f)) {
+        System.out.println("Reading config from:");
+        System.out.println(configFile.getAbsolutePath());
+
+        if (!configFile.exists()) {
+            throw new RuntimeException(
+            "db.properties not found:\n" +
+            configFile.getAbsolutePath());
+            
+        }
+
+        try (FileInputStream fis = new FileInputStream(configFile)) {
             props.load(fis);
         }
 
     } catch (Exception e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(null,
-                "Failed to load db.properties\n\n" + e.getMessage(),
-                "Configuration Error",
-                JOptionPane.ERROR_MESSAGE);
-        System.exit(1);
+
+        throw new RuntimeException(e);
     }
 
     return props;

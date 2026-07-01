@@ -2,6 +2,7 @@ package shc;
 
 import shc.db.DBConnection;
 import shc.db.Schema;
+import shc.ui.DatabaseConfigFrame;
 import shc.ui.LoginFrame;
 
 import javax.swing.*;
@@ -13,26 +14,56 @@ import javax.swing.*;
  * ╚══════════════════════════════════════════╝
  */
 public class Main {
-    public static void main(String[] args) {
-        // System look & feel (looks native on Windows)
-        try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); }
-        catch (Exception ignored) {}
 
-        // Override a few global defaults for consistent rendering
+    public static void main(String[] args) {
+
+        // System look & feel (looks native on Windows)
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception ignored) {
+        }
+
+        // Override a few global defaults
         UIManager.put("Table.showHorizontalLines", true);
         UIManager.put("ScrollBar.width", 8);
 
-        // Splash / init on background thread, then show login
-        SwingWorker<Void, Void> init = new SwingWorker<>() {
+        SwingWorker<Void, Void> init = new SwingWorker<Void, Void>() {
+
+            @Override
             protected Void doInBackground() {
-                DBConnection.getInstance().getConnection(); // connect + auto-create DB if needed
-                Schema.initialize();                        // create tables + seed admin
+                try {
+                    DBConnection.getInstance().getConnection();
+                    Schema.initialize();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    throw new RuntimeException(ex);
+                }
                 return null;
             }
-            protected void done() {
-                SwingUtilities.invokeLater(() -> new LoginFrame().setVisible(true));
-            }
-        };
-        init.execute();
+
+            @Override
+protected void done() {
+
+    try {
+
+        get();
+
+        SwingUtilities.invokeLater(() ->
+                new LoginFrame().setVisible(true));
+
+    } catch (Exception ex) {
+
+        // No debug popup in production
+        SwingUtilities.invokeLater(() ->
+                new DatabaseConfigFrame().setVisible(true));
+
     }
+
+}
+        };
+
+        init.execute();
+
+    }
+
 }
