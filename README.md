@@ -225,7 +225,8 @@ Specializing in:
 - Video Editing
 
 GitHub:
-https://github.com/YOUR_USERNAME
+https://github.com/Syed-Sufiyan-Ali
+<br>
 linkedin:
 www.linkedin.com/in/syed-sufiyan-ali-2502ba397
 ---
