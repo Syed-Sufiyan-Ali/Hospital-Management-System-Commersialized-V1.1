@@ -3,6 +3,7 @@ package shc.db;
 import java.sql.*;
 import java.io.*;
 import java.util.Properties;
+import shc.util.ConfigManager;
 import javax.swing.JOptionPane;
 
 /**
@@ -57,7 +58,20 @@ public class DBConnection {
         catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }public void resetConnection() {
+
+    try {
+
+        if (connection != null && !connection.isClosed()) {
+            connection.close();
+        }
+
+    } catch (SQLException ignored) {
     }
+
+    connection = null;
+}
+
 
    private Properties loadConfig() {
 
@@ -75,12 +89,12 @@ public class DBConnection {
                         .toURI())
                 .getParentFile();
 
-        configFile = new File(appDir, "db.properties");
+        configFile = ConfigManager.getConfigFile();
 
-        // Development mode fallback
-        if (!configFile.exists()) {
+          // Development mode fallback
+           if (!configFile.exists()) {
             configFile = new File("target/classes/db.properties");
-        }
+                 }
 
         System.out.println("Reading config from:");
         System.out.println(configFile.getAbsolutePath());

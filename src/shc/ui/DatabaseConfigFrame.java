@@ -1,6 +1,7 @@
 package shc.ui;
 import shc.db.DBConnection;
 import shc.db.Schema;
+import shc.util.ConfigManager;
 import shc.ui.LoginFrame;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -147,16 +148,13 @@ public class DatabaseConfigFrame extends JFrame {
         props.setProperty("db.password",
                 new String(passwordField.getPassword()));
 
-        File file = new File("target/classes/db.properties");
+        File file = ConfigManager.getConfigFile();
 
-        try (FileOutputStream out = new FileOutputStream(file)) {
-            props.store(out, "Database Configuration");
-        }
+try (FileOutputStream out = new FileOutputStream(file)) {
+    props.store(out, "Database Configuration");
+}
 
-        // Reset old connection
-        DBConnection.getInstance();
-
-        // Try connecting using newly saved config
+        DBConnection.getInstance().resetConnection(); 
         DBConnection.getInstance().getConnection();
 
         Schema.initialize();
