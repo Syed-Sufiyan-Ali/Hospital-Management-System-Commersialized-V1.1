@@ -36,6 +36,7 @@ public class DBConnection {
     }
 
     private void connect() {
+        System.out.println(">>> connect()");
         try {
             Properties props = loadConfig();
             String host = props.getProperty("db.host", "localhost");
@@ -116,5 +117,57 @@ public class DBConnection {
     }
 
     return props;
+}
+private Connection connectWithoutDatabase() {
+    System.out.println(">>> connectWithoutDatabase()");
+    try {
+
+        Properties props = loadConfig();
+
+        String host = props.getProperty("db.host", "localhost");
+        String port = props.getProperty("db.port", "3306");
+        String user = props.getProperty("db.user", "root");
+        String pass = props.getProperty("db.password", "");
+
+        Class.forName("com.mysql.cj.jdbc.Driver");
+
+        String url =
+                "jdbc:mysql://" + host + ":" + port
+                        + "/?useSSL=false"
+                        + "&allowPublicKeyRetrieval=true"
+                        + "&serverTimezone=UTC";
+
+        return DriverManager.getConnection(url, user, pass);
+
+    } catch (Exception e) {
+
+        throw new RuntimeException(e);
+
+    }
+
+}
+
+public void createDatabaseIfNotExists() {
+    System.out.println(">>> createDatabaseIfNotExists()");
+    Properties props = loadConfig();
+
+    String database =
+            props.getProperty("db.name", "sufiyan_health_clinic");
+
+    String sql =
+            "CREATE DATABASE IF NOT EXISTS `" + database + "`";
+
+    try (
+            Connection conn = connectWithoutDatabase();
+            Statement stmt = conn.createStatement()) {
+
+        stmt.executeUpdate(sql);
+
+    } catch (SQLException e) {
+
+        throw new RuntimeException(e);
+
+    }
+
 }
 }

@@ -98,63 +98,68 @@ public class DatabaseConfigFrame extends JFrame {
         testButton.addActionListener(e -> testConnection());
         saveButton.addActionListener(e -> saveConfiguration());
     }
+    
+    private void saveProperties() throws Exception {
 
+    Properties props = new Properties();
+
+    props.setProperty("db.host", hostField.getText().trim());
+    props.setProperty("db.port", portField.getText().trim());
+    props.setProperty("db.name", dbField.getText().trim());
+    props.setProperty("db.user", userField.getText().trim());
+    props.setProperty("db.password",
+            new String(passwordField.getPassword()));
+
+    File file = ConfigManager.getConfigFile();
+
+    try (FileOutputStream out = new FileOutputStream(file)) {
+
+        props.store(out, "Database Configuration");
+
+    }
+
+}
     private void testConnection() {
 
-        String host = hostField.getText().trim();
-        String port = portField.getText().trim();
-        String db = dbField.getText().trim();
-        String user = userField.getText().trim();
-        String pass = new String(passwordField.getPassword());
+       
+    try {
 
-        String url = "jdbc:mysql://" + host + ":" + port + "/" + db
-                + "?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
+        saveProperties();
 
-        try {
+        DBConnection.getInstance().resetConnection();
 
-            Class.forName("com.mysql.cj.jdbc.Driver");
+        DBConnection.getInstance().createDatabaseIfNotExists();
 
-            Connection con = DriverManager.getConnection(url, user, pass);
+        DBConnection.getInstance().getConnection();
 
-            con.close();
+        Schema.initialize();
 
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Database connection successful!",
-                    "Success",
-                    JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(
+                this,
+                "Connection successful!\n\nDatabase initialized successfully.",
+                "Success",
+                JOptionPane.INFORMATION_MESSAGE);
 
-        } catch (Exception ex) {
+    } catch (Exception ex) {
 
-            JOptionPane.showMessageDialog(
-                    this,
-                    ex.getMessage(),
-                    "Connection Failed",
-                    JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(
+                this,
+                ex.getMessage(),
+                "Connection Failed",
+                JOptionPane.ERROR_MESSAGE);
 
-        }
+    }
 
     }
     private void saveConfiguration() {
+     try {
 
-    try {
+        saveProperties();
 
-        Properties props = new Properties();
+        DBConnection.getInstance().resetConnection();
 
-        props.setProperty("db.host", hostField.getText().trim());
-        props.setProperty("db.port", portField.getText().trim());
-        props.setProperty("db.name", dbField.getText().trim());
-        props.setProperty("db.user", userField.getText().trim());
-        props.setProperty("db.password",
-                new String(passwordField.getPassword()));
+        DBConnection.getInstance().createDatabaseIfNotExists();
 
-        File file = ConfigManager.getConfigFile();
-
-try (FileOutputStream out = new FileOutputStream(file)) {
-    props.store(out, "Database Configuration");
-}
-
-        DBConnection.getInstance().resetConnection(); 
         DBConnection.getInstance().getConnection();
 
         Schema.initialize();
@@ -179,7 +184,7 @@ try (FileOutputStream out = new FileOutputStream(file)) {
                 JOptionPane.ERROR_MESSAGE);
 
     }
-
+    
 }
 
 }
