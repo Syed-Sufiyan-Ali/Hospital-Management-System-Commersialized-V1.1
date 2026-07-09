@@ -1,4 +1,4 @@
-# 🏥 Sufiyan Health Clinic Management System
+# 🏥 Sufiyan Health Clinic Management System (Version 1.1)
 
 A desktop-based Clinic Management System developed using **Java Swing** and **MySQL**, designed to simplify day-to-day clinic operations through a clean, responsive, and easy-to-use interface.
 
@@ -16,35 +16,36 @@ The project focuses on writing clean, maintainable code while following a modula
 
 # ✨ Features
 
-- Secure Login System
-- MySQL Database Integration
-- Automatic Database Initialization
-- First-Time Database Configuration Wizard
-- Persistent Database Configuration
-- Patient Record Management
-- Billing Module
-- Modular Java Architecture
-- Windows Installer Support
-- Desktop Shortcut Integration
+* Secure Login System
+* MySQL Database Integration
+* Automatic Database Creation *(New in V1.1)*
+* Automatic Database Initialization
+* First-Time Database Configuration Wizard
+* Persistent Database Configuration
+* Patient Record Management
+* Billing Module
+* Modular Java Architecture
+* Windows Installer Support
+* Desktop Shortcut Integration
 
 ---
 
 # 🛠 Tech Stack
 
-| Technology | Purpose |
-|------------|----------|
-| Java 26 | Application Development |
-| Java Swing | Desktop User Interface |
-| Maven | Dependency & Build Management |
-| MySQL | Database |
-| JDBC | Database Connectivity |
-| JPackage | Windows Installer Creation |
+| Technology | Purpose                       |
+| ---------- | ----------------------------- |
+| Java 26    | Application Development       |
+| Java Swing | Desktop User Interface        |
+| Maven      | Dependency & Build Management |
+| MySQL      | Database                      |
+| JDBC       | Database Connectivity         |
+| JPackage   | Windows Installer Creation    |
 
 ---
 
 # 📂 Project Structure
 
-```
+```text
 SHC
 │
 ├── src
@@ -76,7 +77,7 @@ SHC
 
 The application follows a layered structure.
 
-```
+```text
 User Interface
         │
         ▼
@@ -101,16 +102,16 @@ The application automatically creates and reads the configuration from the user'
 
 Example location:
 
-```
+```text
 %LOCALAPPDATA%\Sufiyan Health Clinic\db.properties
 ```
 
 This approach:
 
-- avoids hardcoded credentials
-- follows Windows best practices
-- removes the need for administrator permissions
-- allows configuration updates without rebuilding the application
+* avoids hardcoded credentials
+* follows Windows best practices
+* removes the need for administrator permissions
+* allows configuration updates without rebuilding the application
 
 ---
 
@@ -146,24 +147,57 @@ mvn clean package
 run.bat
 ```
 
+or launch the generated Windows installer created using **JPackage**.
+
 ---
 
-# 🗄 Database Requirements
+# 🗄 Database Setup (Updated in Version 1.1)
 
 The application requires:
 
-- MySQL Server 8+
-- MySQL Connector/J
+* MySQL Server 8+
+* MySQL Connector/J
 
-During the first launch, the application allows the user to configure:
+**Version 1.1 introduces a much simpler setup process.**
 
-- Host
-- Port
-- Database Name
-- Username
-- Password
+Unlike **Version 1.0**, users no longer need to manually create a MySQL database before launching the application.
 
-The connection is validated before being saved.
+During the first launch, the Configuration Window will guide the user through the initial setup by requesting:
+
+* Host
+* Port
+* Database Name
+* Username
+* Password
+
+After validating the connection, the application will automatically:
+
+* Create the database if it does not already exist.
+* Initialize all required tables.
+* Save the database configuration for future launches.
+
+Once the setup is complete, the application is ready to use immediately without any additional database configuration.
+
+---
+
+# 🆕 Version 1.1 Update
+
+### What's New
+
+* Automatic database creation during first-time setup.
+* Improved Configuration Window.
+* Automatic database schema initialization.
+* Simplified installation process.
+* No manual database creation required.
+* Better first-time user experience.
+
+### Changes from Version 1.0
+
+| Version 1.0                                                         | Version 1.1                                                                             |
+| ------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| Database had to be created manually before running the application. | Database can be created directly from the Configuration Window during first-time setup. |
+| Manual setup before first launch.                                   | Guided setup with automatic database initialization.                                    |
+| More installation steps.                                            | Faster and more beginner-friendly installation.                                         |
 
 ---
 
@@ -171,13 +205,13 @@ The connection is validated before being saved.
 
 This project was built with the following objectives:
 
-- Clean and readable code
-- Modular architecture
-- Easy maintenance
-- Reusable components
-- Separation of concerns
-- Beginner-friendly project structure
-- Production-ready Windows deployment
+* Clean and readable code
+* Modular architecture
+* Easy maintenance
+* Reusable components
+* Separation of concerns
+* Beginner-friendly project structure
+* Production-ready Windows deployment
 
 ---
 
@@ -185,15 +219,15 @@ This project was built with the following objectives:
 
 Planned enhancements include:
 
-- Appointment Scheduling
-- Prescription Management
-- Inventory Management
-- PDF Invoice Generation
-- Backup & Restore
-- User Roles & Permissions
-- Dashboard Analytics
-- Dark Mode
-- Multi-language Support
+* Appointment Scheduling
+* Prescription Management
+* Inventory Management
+* PDF Invoice Generation
+* Backup & Restore
+* User Roles & Permissions
+* Dashboard Analytics
+* Dark Mode
+* Multi-language Support
 
 ---
 
@@ -218,17 +252,20 @@ Software Developer
 
 Specializing in:
 
-- Java Desktop Applications
-- Database Systems
-- Shopify Development
-- Graphic Design
-- Video Editing
+* Java Desktop Applications
+* Database Systems
+* Shopify Development
+* Graphic Design
+* Video Editing
 
-GitHub:
+**GitHub:**
+
 https://github.com/Syed-Sufiyan-Ali
-<br>
-linkedin:
-www.linkedin.com/in/syed-sufiyan-ali-2502ba397
+
+**LinkedIn:**
+
+https://www.linkedin.com/in/syed-sufiyan-ali-2502ba397
+
 ---
 
 # 📄 License
